@@ -6,3 +6,6 @@ Usage: `FROM nerdsandcompany/docker-heroku-node`
 
 * Heroku 16
 * Node 6.x
+* Protractor
+* Chrome
+* ChromeDriver
