@@ -26,17 +26,22 @@ RUN echo "export PATH=\"/app/heroku/node/bin:/app/user/node_modules/.bin:\$PATH\
 # Install protractor and webdriver globally
 RUN /app/heroku/node/bin/npm install -g protractor && webdriver-manager update --standalone false --gecko false
 
-# Install chrome
+# Add source for yarn
+RUN curl -sS http://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
+# Install chrome (and yarn)
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
   && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
   && apt-get update -qqy \
-  && apt-get -qqy install xvfb google-chrome-stable \
+  && apt-get -qqy install yarn xvfb google-chrome-stable \
   && rm /etc/apt/sources.list.d/google-chrome.list \
   && rm -rf /var/lib/apt/lists/*
 
-# Install npm dependencies
-ONBUILD ADD package.json /app/user/
-ONBUILD RUN /app/heroku/node/bin/npm install
+# run npm or yarn install
+# add yarn.lock to .slugignore in your project
+ONBUILD ADD package.json yarn.* /app/user/
+ONBUILD RUN [ -f yarn.lock ] && yarn install --no-progress || npm install
 
 # Add files
 ONBUILD ADD . /app/user/
