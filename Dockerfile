@@ -5,7 +5,7 @@ MAINTAINER Bob Olde Hampsink <b.oldehampsink@nerds.company>
 # Internally, we arbitrarily use port 3000
 ENV PORT 3000
 # Which version of node?
-ENV NODE_ENGINE 8.9.0
+ENV NODE_ENGINE 8.9.1
 # Locate our binaries
 ENV PATH /app/heroku/node/bin/:/app/user/node_modules/.bin:$PATH
 
