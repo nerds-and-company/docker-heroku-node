@@ -4,7 +4,7 @@ FROM heroku/heroku:18
 # Internally, we arbitrarily use port 3000
 ENV PORT 3000
 # Which version of node?
-ENV NODE_ENGINE 10.15.3
+ENV NODE_ENGINE 12.3.1
 # Locate our binaries
 ENV PATH /app/heroku/node/bin/:/app/user/node_modules/.bin:$PATH
 
