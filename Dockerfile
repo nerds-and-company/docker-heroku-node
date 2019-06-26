@@ -3,6 +3,8 @@ FROM heroku/heroku:18
 
 # Internally, we arbitrarily use port 3000
 ENV PORT 3000
+# Make sure apt-get does not ask us questions
+ENV DEBIAN_FRONTEND noninteractive
 # Which version of node?
 ENV NODE_ENGINE 12.3.1
 # Locate our binaries
