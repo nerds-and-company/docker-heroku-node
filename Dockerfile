@@ -6,7 +6,7 @@ ENV PORT 3000
 # Make sure apt-get does not ask us questions
 ENV DEBIAN_FRONTEND noninteractive
 # Which version of node?
-ENV NODE_ENGINE 12.3.1
+ENV NODE_ENGINE 12.9.1
 # Locate our binaries
 ENV PATH /app/heroku/node/bin/:/app/user/node_modules/.bin:$PATH
 
