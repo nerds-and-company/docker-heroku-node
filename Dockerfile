@@ -6,7 +6,8 @@ ENV PORT 3000
 # Make sure apt-get does not ask us questions
 ENV DEBIAN_FRONTEND noninteractive
 # Which version of node?
-ENV NODE_ENGINE 12.9.1
+ENV NODE_VERSION 14.2.0
+ENV YARN_VERSION 1.22.4
 # Locate our binaries
 ENV PATH /app/heroku/node/bin/:/app/user/node_modules/.bin:$PATH
 
@@ -18,24 +19,27 @@ ENV DBUS_SESSION_BUS_ADDRESS=/dev/null
 RUN mkdir -p /app/heroku/node /app/.profile.d
 WORKDIR /app/user
 
-# Install node
-RUN curl -s https://s3pository.heroku.com/node/v$NODE_ENGINE/node-v$NODE_ENGINE-linux-x64.tar.gz | tar --strip-components=1 -xz -C /app/heroku/node
+# Install Node
+RUN curl -s --retry 3 -L http://s3pository.heroku.com/node/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz | tar xz -C /app/heroku/node/
+RUN mv /app/heroku/node/node-v$NODE_VERSION-linux-x64 /app/heroku/node/node-$NODE_VERSION
+ENV PATH /app/heroku/node/node-$NODE_VERSION/bin:$PATH
 
 # Export the node path in .profile.d
-RUN echo "export PATH=\"/app/heroku/node/bin:/app/user/node_modules/.bin:\$PATH\"" > /app/.profile.d/nodejs.sh
+RUN echo "export PATH=\"/app/heroku/node-$NODE_VERSION/bin:/app/user/node_modules/.bin:\$PATH\"" > /app/.profile.d/nodejs.sh
 
 # Install protractor and webdriver globally
-RUN /app/heroku/node/bin/npm install -g protractor && webdriver-manager update --standalone false --gecko false
+RUN npm install -g protractor && webdriver-manager update --standalone false --gecko false
 
-# Add source for yarn
-RUN curl -sS http://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+# Install Yarn
+RUN curl -s --retry 3 -L https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz | tar xz -C /app/heroku/node/
+RUN mv /app/heroku/node/yarn-v$YARN_VERSION /app/heroku/node/yarn-$YARN_VERSION
+ENV PATH /app/heroku/node/yarn-$YARN_VERSION/bin:$PATH
 
-# Install chrome (and yarn)
+# Install Google Chrome
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
   && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
   && apt-get update -qqy \
-  && apt-get -qqy install yarn xvfb google-chrome-stable \
+  && DEBIAN_FRONTEND=noninteractive apt-get -qqy install google-chrome-stable \
   && rm /etc/apt/sources.list.d/google-chrome.list \
   && rm -rf /var/lib/apt/lists/*
 

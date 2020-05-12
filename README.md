@@ -5,7 +5,8 @@ Usage: `FROM nerdsandcompany/docker-heroku-node`
 # Specifications
 
 * Heroku 18
-* Node 12.x
+* Node 14.x
+* Yarn 1.22.x
 * Protractor
 * Chrome
 * ChromeDriver
