@@ -6,7 +6,7 @@ ENV PORT 3000
 # Make sure apt-get does not ask us questions
 ENV DEBIAN_FRONTEND noninteractive
 # Which version of node?
-ENV NODE_VERSION 14.2.0
+ENV NODE_VERSION 12.9.1
 ENV YARN_VERSION 1.22.4
 # Locate our binaries
 ENV PATH /app/heroku/node/bin/:/app/user/node_modules/.bin:$PATH
@@ -47,6 +47,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 # add yarn.lock to .slugignore in your project
 ONBUILD ADD package*.json yarn.* /app/user/
 ONBUILD RUN [ -f yarn.lock ] && yarn install --no-progress || npm install
+ONBUILD RUN if command -v ngcc; then ngcc; else echo 'No ngcc detected'; fi
 
 # Add files
 ONBUILD ADD . /app/user/
