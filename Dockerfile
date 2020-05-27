@@ -47,6 +47,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 # add yarn.lock to .slugignore in your project
 ONBUILD ADD package*.json yarn.* /app/user/
 ONBUILD RUN [ -f yarn.lock ] && yarn install --no-progress || npm install
+ONBUILD RUN if command -v ngcc; then ngcc; else echo 'No ngcc detected'; fi
 
 # Add files
 ONBUILD ADD . /app/user/
