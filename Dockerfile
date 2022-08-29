@@ -20,7 +20,7 @@ RUN mkdir -p /app/heroku/node /app/.profile.d
 WORKDIR /app/user
 
 # Install Node
-RUN curl -s --retry 3 -L http://s3pository.heroku.com/node/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz | tar xz -C /app/heroku/node/
+RUN curl -s --retry 3 -L https://heroku-nodebin.s3.us-east-1.amazonaws.com/node/release/linux-x64/node-v$NODE_VERSION-linux-x64.tar.gz | tar xz -C /app/heroku/node/
 RUN mv /app/heroku/node/node-v$NODE_VERSION-linux-x64 /app/heroku/node/node-$NODE_VERSION
 ENV PATH /app/heroku/node/node-$NODE_VERSION/bin:$PATH
 
@@ -31,7 +31,7 @@ RUN echo "export PATH=\"/app/heroku/node-$NODE_VERSION/bin:/app/user/node_module
 RUN npm install -g protractor && webdriver-manager update --standalone false --gecko false
 
 # Install Yarn
-RUN curl -s --retry 3 -L https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz | tar xz -C /app/heroku/node/
+RUN curl -s --retry 3 -L https://heroku-nodebin.s3.us-east-1.amazonaws.com/yarn/release/yarn-v$YARN_VERSION.tar.gz | tar xz -C /app/heroku/node/
 RUN mv /app/heroku/node/yarn-v$YARN_VERSION /app/heroku/node/yarn-$YARN_VERSION
 ENV PATH /app/heroku/node/yarn-$YARN_VERSION/bin:$PATH
 
