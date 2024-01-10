@@ -4,7 +4,7 @@ Usage: `FROM nerdsandcompany/docker-heroku-node`
 
 # Specifications
 
-* Heroku 18
+* Heroku 22
 * Node 18.19.0
 * Yarn 1.22.19
 * Protractor
